@@ -1,0 +1,99 @@
+:root {
+    --primary-color: #0078d4;
+    --background-color: #f3f3f3;
+    --surface-color: #fff;
+    --text-color: #323130;
+    --border-color: #e1dfdd;
+}
+
+[data-theme='dark'] {
+    --primary-color: #3a96dd;
+    --background-color: #1e1e1e;
+    --surface-color: #2d2d2d;
+    --text-color: #f3f3f3;
+    --border-color: #444;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 1rem;
+}
+
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.links-container {
+    display: grid;
+    gap: 10px;
+    margin: 1rem 0;
+}
+
+a.button {
+    padding: 1rem;
+    text-decoration: none;
+    color: white;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    text-align: center;
+}
+
+.form-container {
+    background: var(--surface-color);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+input, select, button {
+    margin: .5rem 0;
+    padding: .5rem;
+    font-size: 1rem;
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.footer {
+    text-align: center;
+    padding: 1rem;
+    font-size: .9rem;
+    color: var(--text-color);
+}
+
+/* Botão do tema */
+#theme-toggle {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: var(--surface-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 999;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .container {
+        padding: .5rem;
+    }
+}
