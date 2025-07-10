@@ -46,8 +46,8 @@
         .card {
             background: var(--surface-color);
             border-radius: var(--border-radius);
-            padding: 12px;
-            margin-bottom: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: var(--transition);
