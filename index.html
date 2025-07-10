@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meus Links Úteis</title>
+<title>Meus Links Úteis - linkWorkH 1.3</title>
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-theme="light">
 
-<!-- Botão de tema -->
+<!-- Botão para alternar tema -->
 <button id="theme-toggle" aria-label="Alternar Tema">🌙</button>
 
 <div class="container">
@@ -16,7 +16,7 @@
     <div id="loading" class="loading">Carregando seus links...</div>
     <div class="links-container" id="links"></div>
 
-    <!-- Formulários -->
+    <!-- Formulário para adicionar -->
     <div class="form-container">
         <h2>➕ Adicionar Novo Link</h2>
         <form id="form">
@@ -26,8 +26,20 @@
                 <option value="blue">Azul</option>
                 <option value="green">Verde</option>
                 <option value="orange">Laranja</option>
+                <option value="purple">Roxo</option>
             </select>
             <button type="submit" class="btn">Adicionar</button>
+        </form>
+    </div>
+
+    <!-- Formulário para excluir -->
+    <div class="form-container">
+        <h2>🗑️ Gerenciar Links</h2>
+        <form id="delete-form">
+            <select id="delete-select">
+                <option value="-1">Selecione um link para excluir</option>
+            </select>
+            <button type="submit" class="btn btn-danger">Excluir</button>
         </form>
     </div>
 </div>
@@ -36,30 +48,102 @@
     &copy; 2024 - Helio Goes Junior - Todos os direitos reservados
 </footer>
 
-<script>
-const toggleBtn = document.getElementById('theme-toggle');
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-const savedTheme = localStorage.getItem('theme');
+<script type="module">
+// Firebase já configurado no seu linkWorkH 1.2
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+const firebaseConfig = {
+    apiKey: "AIzaSyCHimH-hvDo2uedCijx8LKXMY_Z8fkLJS0",
+    authDomain: "appsworksh.firebaseapp.com",
+    databaseURL: "https://appsworksh-default-rtdb.firebaseio.com",
+    projectId: "appsworksh",
+    storageBucket: "appsworksh.appspot.com",
+    messagingSenderId: "910353044495",
+    appId: "1:910353044495:web:b82a2c3d0a69dcfd663f7a",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const linksRef = ref(db, 'links');
+let linksData = [];
+
+// Tema
+const toggleBtn = document.getElementById('theme-toggle');
+const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
     document.body.dataset.theme = savedTheme;
-} else {
-    document.body.dataset.theme = prefersDark ? 'dark' : 'light';
+    toggleBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 }
-
 toggleBtn.addEventListener('click', () => {
-    const currentTheme = document.body.dataset.theme;
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    const newTheme = document.body.dataset.theme === 'light' ? 'dark' : 'light';
     document.body.dataset.theme = newTheme;
-    localStorage.setItem('theme', newTheme);
     toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', newTheme);
 });
 
-if (document.body.dataset.theme === 'dark') {
-    toggleBtn.textContent = '☀️';
+// CRUD
+function loadLinks() {
+    const loading = document.getElementById('loading');
+    onValue(linksRef, (snapshot) => {
+        const data = snapshot.val();
+        const linksDiv = document.getElementById('links');
+        linksDiv.innerHTML = '';
+        linksData = [];
+        if (data) {
+            Object.entries(data).forEach(([id, val]) => {
+                linksData.push({id, ...val});
+                const btn = document.createElement('a');
+                btn.href = val.url;
+                btn.textContent = val.name;
+                btn.className = `button button-${val.color}`;
+                btn.target = '_blank';
+                linksDiv.appendChild(btn);
+            });
+        }
+        updateDeleteOptions();
+        loading.style.display = 'none';
+    });
 }
 
-// aqui entra seu JS para Firebase normalmente
+function addLink(url, name, color) {
+    const newRef = push(linksRef);
+    set(newRef, {url, name, color, timestamp: Date.now()});
+}
+
+function deleteLink(id) {
+    remove(ref(db, `links/${id}`));
+}
+
+function updateDeleteOptions() {
+    const sel = document.getElementById('delete-select');
+    sel.innerHTML = '<option value="-1">Selecione um link para excluir</option>';
+    linksData.forEach((l, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.text = l.name;
+        sel.appendChild(opt);
+    });
+}
+
+document.getElementById('form').addEventListener('submit', e => {
+    e.preventDefault();
+    const url = document.getElementById('link').value;
+    const name = document.getElementById('linkName').value;
+    const color = document.getElementById('color').value;
+    addLink(url, name, color);
+    e.target.reset();
+});
+
+document.getElementById('delete-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const idx = document.getElementById('delete-select').value;
+    if (idx !== "-1") {
+        deleteLink(linksData[idx].id);
+    }
+});
+
+loadLinks();
 </script>
 </body>
 </html>
