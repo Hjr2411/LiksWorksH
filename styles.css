@@ -46,8 +46,8 @@
         .card {
             background: var(--surface-color);
             border-radius: var(--border-radius);
-            padding: 24px;
-            margin-bottom: 24px;
+            padding: 12px;
+            margin-bottom: 12px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: var(--transition);
@@ -95,7 +95,7 @@
             transform: translateY(0);
         }
 
-        /* Cores dos botões - Tema Windows 11 */
+        
         .button-blue { background: linear-gradient(135deg, #0078d4, #106ebe); }
         .button-green { background: linear-gradient(135deg, #107c10, #0e6b0e); }
         .button-orange { background: linear-gradient(135deg, #ff8c00, #e67700); }
