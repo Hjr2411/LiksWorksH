@@ -1,5 +1,4 @@
- <style>
-        /* Tema Windows 11 */
+ 
         :root {
             --primary-color: #0078d4;
             --secondary-color: #106ebe;
@@ -410,4 +409,4 @@
             visibility: visible;
             opacity: 1;
         }
-    </style>
+   
